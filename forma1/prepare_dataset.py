@@ -1,6 +1,7 @@
 import librosa
 import os
 import json
+from tqdm.auto import tqdm
 
 DATASET_PATH = "dataset"
 JSON_PATH = "data.json"
@@ -37,7 +38,8 @@ def preprocess_dataset(dataset_path,json_path,num_mfcc=13,n_fft=2048,hop_length=
             print("\nProcessing: '{}'".format(label))
 
             # processa todos os arquivos de audio no subdiretorio e guarda o MFCC
-            for f in filenames:
+            for f in tqdm(filenames):
+                #os.system('cls' if os.name == 'nt' else 'clear')
                 file_path = os.path.join(dirpath,f)
 
                 # carrega o audio e corta ele para garantir consistencia no dataset
@@ -56,7 +58,8 @@ def preprocess_dataset(dataset_path,json_path,num_mfcc=13,n_fft=2048,hop_length=
                     data["MFCCs"].append(MFCCs.T.tolist())
                     data["labels"].append(i-1)
                     data["files"].append(file_path)
-                    print("{}: {}".format(file_path,i-1))
+                    #print("{}: {}".format(file_path,i-1))
+                    print(" ",end='\r')
     
     # salva os dados no json
     with open(json_path,"w") as fp:
